@@ -6,7 +6,7 @@ This project can be run with Docker or manually.
 
 To run the project with Docker, simply run the following command:
 
-""" docker-compose up """
+`docker-compose up`
 
 This will start all of the necessary services, including the client and server.
 
