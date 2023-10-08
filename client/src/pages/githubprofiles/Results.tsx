@@ -1,4 +1,4 @@
-import UserCard from './UserCard'
+import UserCard from 'src/components/UserCard'
 
 const Results = ({ users }: { users: GitHubUserItem[] }) => {
   return (

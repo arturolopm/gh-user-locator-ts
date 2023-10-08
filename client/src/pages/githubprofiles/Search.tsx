@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import MainButton from 'src/components/MainButton'
 import { useFetch } from 'src/hooks/useFetch'
 
 const Search = ({
@@ -52,11 +53,7 @@ const Search = ({
             placeholder='Enter input'
           />
         </div>
-        <button
-          type='submit'
-          className='bg-violet-500 hover:bg-violet-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'>
-          Fetch Data
-        </button>
+        <MainButton text='Search' />
       </form>
       {error && <div>{error.message}</div>}
       {errorValidation && (

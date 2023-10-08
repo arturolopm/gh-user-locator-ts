@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import User from '../models/user'
+import { createUserOnDB } from '../utils/utils'
 
 export const getAllUsers = async (req: Request, res: Response) => {
   const responseItem = await User.findAll()
@@ -21,30 +22,17 @@ export const getOneUser = async (req: Request, res: Response) => {
 export const createUser = async (req: Request, res: Response) => {
   const { body } = req
   try {
-    const alreadyExist = await User.findOne({
-      where: {
-        email_address: body.email_address
-      }
-    })
-    if (alreadyExist) {
-      return res.status(400).json({
-        message: 'User already exists'
-      })
+    const responseItem = await createUserOnDB(body)
+    res.status(200).send(responseItem)
+  } catch (error: any) {
+    // Check if the error is due to a pre-existing user
+    if (error.message.includes('already exists')) {
+      res.status(409).send({ error: error.message })
+    } else {
+      res
+        .status(500)
+        .send({ error: 'An error occurred while creating the user.' })
     }
-
-    const user = await User.create(body)
-    await user.save()
-    res.status(200).json({
-      message: 'User created successfully',
-      user
-    })
-  } catch (error) {
-    console.log(error)
-
-    res.status(500).json({
-      message: 'Error creating user',
-      error: error
-    })
   }
 }
 export const deleteUser = (req: Request, res: Response) => {
@@ -57,6 +45,7 @@ export const deleteUser = (req: Request, res: Response) => {
 export const editUser = async (req: Request, res: Response) => {
   const { id } = req.params
   const { body } = req
+
   try {
     const user = await User.findByPk(id)
     if (!user) {

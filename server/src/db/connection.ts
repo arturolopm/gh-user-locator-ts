@@ -14,5 +14,17 @@ const db = new Sequelize(dbname!, dbUser!, dbPass!, {
   port: 3306,
   dialect: 'mysql'
 })
+// Function to create the database if it doesn't exist
+const createDatabaseIfNotExists = async () => {
+  try {
+    await db.query('CREATE DATABASE IF NOT EXISTS mydb;')
+    console.log('Database created or successfully checked.')
+  } catch (error) {
+    console.error('Error creating database:', error)
+  }
+}
+
+// Create the database if it doesn't exist
+createDatabaseIfNotExists()
 
 export default db

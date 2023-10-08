@@ -1,5 +1,22 @@
+import { useState } from 'react'
+import { useFetch } from 'src/hooks/useFetch'
+import MainButton from 'src/components/MainButton'
+import { BASE_URL } from 'src/constants'
+interface Post extends GithubUser {}
 const ProfileCard = ({ user, error }: { user: GithubUser; error: Error }) => {
   const githubReposUrl = user ? user.repos_url : ''
+  const [url, setUrl] = useState('')
+  const { data, error: errorPost } = useFetch<Post>(url, {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    body: JSON.stringify(user)
+  })
+
+  const handleClick = () => {
+    setUrl(`${BASE_URL}/api/users`)
+  }
 
   return (
     <div className='max-w-xs mx-auto bg-white shadow-md rounded-lg overflow-hidden'>
@@ -45,6 +62,20 @@ const ProfileCard = ({ user, error }: { user: GithubUser; error: Error }) => {
               className='text-blue-500 font-bold'>
               View GitHub Repositories
             </a>
+          </div>
+          <div>
+            {data && <div>User succesfully created</div>}
+            {errorPost && (
+              <div className=' text-red-700'>
+                Error creating user {errorPost.message}
+              </div>
+            )}
+          </div>
+          <div className=' text-center'>
+            <MainButton
+              text='Export'
+              onClick={handleClick}
+            />
           </div>
         </div>
       )}

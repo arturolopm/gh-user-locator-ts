@@ -2,16 +2,16 @@ version: '3'
 
 services:
   mysql:
-    image: mysql:10.5
+    image: mysql
     restart: always
     ports:
       - '3306:3306'
     expose:
       - 3306
     environment:
-      mysql_ROOT_PASSWORD: root
-      # mysql_DATABASE: mydb
-      mysql_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+      # MYSQL_DATABASE: mydb
+      MYSQL_PASSWORD: root
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:

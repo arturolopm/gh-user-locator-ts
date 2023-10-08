@@ -19,9 +19,9 @@ const swaggerDefinition = {
         schemas: {
             User: {
                 type: 'object',
-                required: ['userName'],
+                required: ['login'],
                 properties: {
-                    userName: {
+                    login: {
                         type: 'string'
                     }
                 }

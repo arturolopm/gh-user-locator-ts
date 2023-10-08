@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.editUser = exports.deleteUser = exports.createUser = exports.getOneUser = exports.getAllUsers = void 0;
 const user_1 = __importDefault(require("../models/user"));
+const utils_1 = require("../utils/utils");
 const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const responseItem = yield user_1.default.findAll();
     res.json(responseItem);
@@ -35,29 +36,19 @@ exports.getOneUser = getOneUser;
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
     try {
-        const alreadyExist = yield user_1.default.findOne({
-            where: {
-                email_address: body.email_address
-            }
-        });
-        if (alreadyExist) {
-            return res.status(400).json({
-                message: 'User already exists'
-            });
-        }
-        const user = yield user_1.default.create(body);
-        yield user.save();
-        res.status(200).json({
-            message: 'User created successfully',
-            user
-        });
+        const responseItem = yield (0, utils_1.createUserOnDB)(body);
+        res.status(200).send(responseItem);
     }
     catch (error) {
-        console.log(error);
-        res.status(500).json({
-            message: 'Error creating user',
-            error: error
-        });
+        // Check if the error is due to a pre-existing user
+        if (error.message.includes('already exists')) {
+            res.status(409).send({ error: error.message });
+        }
+        else {
+            res
+                .status(500)
+                .send({ error: 'An error occurred while creating the user.' });
+        }
     }
 });
 exports.createUser = createUser;
