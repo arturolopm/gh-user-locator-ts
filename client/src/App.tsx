@@ -1,6 +1,7 @@
 import { Header } from './layout'
 import { Routes, Route } from 'react-router-dom'
-import GithubProfiles from './pages/githubprofiles'
+import GithubProfiles from 'src/pages/githubProfiles'
+import UserProfile from 'src/pages/userProfile'
 function App() {
   return (
     <>
@@ -9,6 +10,10 @@ function App() {
         <Route
           path='/'
           element={<GithubProfiles />}
+        />
+        <Route
+          path='/users/:user'
+          element={<UserProfile />}
         />
       </Routes>
     </>
